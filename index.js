@@ -1,15 +1,27 @@
-var express = require('express');
-var app = express();
+const express = require('express');
+const app = express();
 
-app.get('/', function (req, res) {
-    res.send('{ "response": "Congratulation on Your First deployment" }');
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ response: "Congratulation on Your First deployment" });
 });
 
-app.get('/hello', function (req, res) {
-    res.send('{ "response": "Hello World" }');
+// /hello endpoint
+app.get('/hello', (req, res) => {
+  res.json({ response: "Hello World" });
 });
-app.get('/ready', function (req, res) {
-    res.send('{ "response": " Great!, It works!" }');
+
+// /ready endpoint
+app.get('/ready', (req, res) => {
+  res.json({ response: " Great!, It works!" });
 });
-app.listen(process.env.PORT || 3000);
+
+const port = process.env.PORT || 3000;
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+}
+
+// Export for testing
 module.exports = app;
