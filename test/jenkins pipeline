@@ -1,0 +1,33 @@
+pipeline {
+  agent any
+  environment {
+    dockerimagename = "susi77/nodeapp"
+    registryCredential = 'dockerhublogin'
+  }
+
+  stages {
+    stage('Checkout Source') {
+      steps {
+        git branch: 'main', url: 'https://github.com/gpt2963/node.git'
+      }
+    }
+
+    stage('Build & Test Image') {
+      steps {
+        script {
+          dockerImage = docker.build(dockerimagename)
+        }
+      }
+    }
+
+    stage('Push Image') {
+      steps {
+        script {
+          docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+            dockerImage.push("latest")
+          }
+        }
+      }
+    }
+  }
+}
